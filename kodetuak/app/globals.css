@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+* { 
+  box-sizing: border-box; 
+}
+
+html, body { 
+  width: 100%; 
+  margin: 0; 
+  padding: 0; 
+  background: #fdf6e3;
+  /* INI KUNCI BIAR BISA ZOOM */
+  touch-action: manipulation;
+  overscroll-behavior-y: contain;
+}
+
+/* HAPUS semua yang #__next, main, div, table display block itu */
+
+/* Fix table biar bisa swipe tapi tetap table beneran */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Biar tabel tidak pecah tapi tetap bisa di-zoom */
+table {
+  border-collapse: collapse;
+  width: auto;
+}

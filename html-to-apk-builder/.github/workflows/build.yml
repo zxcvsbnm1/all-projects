@@ -1,0 +1,39 @@
+name: Build APK DATA HK
+on:
+  repository_dispatch:
+    types: [build_apk]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Inject DATA HK HTML
+        run: |
+          if [ -n "${{ github.event.client_payload.html }}" ]; then
+            echo "Injecting DATA HK..."
+            echo "${{ github.event.client_payload.html }}" | base64 -d > index.html
+          fi
+          ls -lh index.html
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          npm install -g cordova
+          rm -rf apk
+          cordova create apk com.hkpkum.datahk "DATA HK"
+          cp index.html apk/www/index.html
+          cd apk
+          cordova platform add android
+          cordova build android --debug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: APK-DATA-HK-V10.9
+          path: apk/platforms/android/app/build/outputs/apk/debug/app-debug.apk

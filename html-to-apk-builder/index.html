@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DATA HK APK Builder - Public</title>
+<style>
+body{font-family:sans-serif;max-width:600px;margin:20px auto;padding:15px;background:#f5f5f5}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:14px;background:#16a34a;color:#fff;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+#log{margin-top:15px;padding:10px;background:#111;color:#0f0;border-radius:8px;font-size:13px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>🚀 BUILD APK DATA HK - PUBLIC</h2>
+<p>Pengunjung tidak perlu token lagi!</p>
+<input id="appName" value="DATA HK V10.9" placeholder="Nama APK">
+<textarea id="htmlCode" rows="12" placeholder="Paste FULL HTML DATA HK kamu di sini..."></textarea>
+<button onclick="build()">BUILD APK SEKARANG</button>
+<div id="log">Siap...</div>
+<p style="font-size:12px;margin-top:10px">Setelah klik, cek Actions di Github kamu 2 menit lagi, download di Artifacts.</p>
+</div>
+<script>
+async function build(){
+  const html = document.getElementById('htmlCode').value;
+  const name = document.getElementById('appName').value;
+  const log = document.getElementById('log');
+  if(!html){ alert('Paste HTML dulu!'); return; }
+  log.textContent = '⏳ Mengirim ke server...';
+  try{
+    const r = await fetch('/api/build', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ html, name })
+    });
+    const j = await r.json();
+    if(j.ok){
+      log.textContent = '✅ Terkirim! Buka Github -> Actions -> tunggu hijau 2 menit -> download di Artifacts.';
+    } else {
+      log.textContent = '❌ Gagal: ' + JSON.stringify(j);
+    }
+  }catch(e){
+    log.textContent = '❌ Error: ' + e.message + '\n(Deploy dulu ke Cloudflare Pages biar /api/build aktif)';
+  }
+}
+</script>
+</body>
+</html>
